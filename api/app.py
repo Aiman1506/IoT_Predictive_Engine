@@ -215,6 +215,8 @@ def model_info() -> tuple:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+# Load model when module is imported (works with gunicorn)
+load_model_artifact()
+
 if __name__ == "__main__":
-    load_model_artifact()
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
