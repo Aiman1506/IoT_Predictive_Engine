@@ -1,0 +1,148 @@
+2026-02-26 15:25:43,339 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:25:43,340 [INFO] FactoryGuard.Train: STEP 1: Loading and Validating Sensor Data
+2026-02-26 15:25:43,340 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:25:43,340 [INFO] src.data_loader: Loading sensor data from D:\Safe Guard AI\data\sensor_data.csv
+2026-02-26 15:25:44,256 [INFO] src.data_loader: Missing values: 64800 -> 0 (after forward/back-fill)
+2026-02-26 15:25:44,423 [INFO] src.data_loader: Data loaded: 1080000 rows, 500 machines, date range 2026-01-01 00:00:00 to 2026-03-31 23:00:00
+2026-02-26 15:25:44,601 [INFO] FactoryGuard.Train: Data summary: {'n_rows': 1080000, 'n_machines': 500, 'date_range': ('2026-01-01T00:00:00', '2026-03-31T23:00:00'), 'failure_rate_pct': np.float64(0.938), 'missing_values': 0}
+2026-02-26 15:25:44,602 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:25:44,602 [INFO] FactoryGuard.Train: STEP 2: Feature Engineering
+2026-02-26 15:25:44,602 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:25:48,795 [INFO] src.feature_engineering: Feature engineering complete: 30 features created, 5500 rows dropped (insufficient history), 1074500 rows remaining
+2026-02-26 15:25:48,899 [INFO] FactoryGuard.Train: Features created: 30
+2026-02-26 15:25:48,900 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:25:48,900 [INFO] FactoryGuard.Train: STEP 3: Temporal Train/Test Split (80/20)
+2026-02-26 15:25:48,900 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:25:49,316 [INFO] src.splitting: Auto-computed cutoff date: 2026-03-14 02:00:00 (80% split)
+2026-02-26 15:25:49,554 [INFO] src.splitting: Train: 859500 rows (0.93% failures) | Test: 215000 rows (0.99% failures)
+2026-02-26 15:25:50,049 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:25:50,049 [INFO] FactoryGuard.Train: STEP 4: Training Baseline Models
+2026-02-26 15:25:50,050 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:25:50,050 [INFO] src.models: Training Logistic Regression baseline...
+2026-02-26 15:25:53,362 [INFO] src.models: Logistic Regression train PR-AUC: 0.8822
+2026-02-26 15:25:53,507 [INFO] src.evaluation: ============================================================
+2026-02-26 15:25:53,507 [INFO] src.evaluation: EVALUATION: Logistic Regression
+2026-02-26 15:25:53,507 [INFO] src.evaluation: ============================================================
+2026-02-26 15:25:53,508 [INFO] src.evaluation:   PR-AUC     : 0.9026
+2026-02-26 15:25:53,508 [INFO] src.evaluation:   Precision  : 0.5207
+2026-02-26 15:25:53,508 [INFO] src.evaluation:   Recall     : 0.9360
+2026-02-26 15:25:53,508 [INFO] src.evaluation:   F1-Score   : 0.6691
+2026-02-26 15:25:53,611 [INFO] src.evaluation: 
+              precision    recall  f1-score   support
+
+      Normal       1.00      0.99      1.00    212876
+     Failure       0.52      0.94      0.67      2124
+
+    accuracy                           0.99    215000
+   macro avg       0.76      0.96      0.83    215000
+weighted avg       0.99      0.99      0.99    215000
+
+2026-02-26 15:25:53,621 [INFO] src.evaluation: Confusion Matrix:
+2026-02-26 15:25:53,622 [INFO] src.evaluation:   TN=211046  FP=1830
+2026-02-26 15:25:53,622 [INFO] src.evaluation:   FN=136  TP=1988
+2026-02-26 15:25:53,622 [INFO] src.evaluation:   False alarm rate (FPR): 0.0086
+2026-02-26 15:25:53,622 [INFO] src.evaluation:   Missed failure rate (FNR): 0.0640
+2026-02-26 15:25:53,797 [INFO] src.evaluation: Confusion matrix saved: D:\Safe Guard AI\outputs\confusion_matrix_logistic_regression.png
+2026-02-26 15:25:54,040 [INFO] src.evaluation: PR curve saved: D:\Safe Guard AI\outputs\pr_curve_logistic_regression.png
+2026-02-26 15:25:54,041 [INFO] src.models: Training Random Forest baseline...
+2026-02-26 15:30:53,717 [INFO] src.models: Random Forest train PR-AUC: 1.0000
+2026-02-26 15:30:55,570 [INFO] src.evaluation: ============================================================
+2026-02-26 15:30:55,570 [INFO] src.evaluation: EVALUATION: Random Forest
+2026-02-26 15:30:55,570 [INFO] src.evaluation: ============================================================
+2026-02-26 15:30:55,571 [INFO] src.evaluation:   PR-AUC     : 0.9338
+2026-02-26 15:30:55,571 [INFO] src.evaluation:   Precision  : 0.9584
+2026-02-26 15:30:55,571 [INFO] src.evaluation:   Recall     : 0.8795
+2026-02-26 15:30:55,571 [INFO] src.evaluation:   F1-Score   : 0.9173
+2026-02-26 15:30:55,703 [INFO] src.evaluation: 
+              precision    recall  f1-score   support
+
+      Normal       1.00      1.00      1.00    212876
+     Failure       0.96      0.88      0.92      2124
+
+    accuracy                           1.00    215000
+   macro avg       0.98      0.94      0.96    215000
+weighted avg       1.00      1.00      1.00    215000
+
+2026-02-26 15:30:55,718 [INFO] src.evaluation: Confusion Matrix:
+2026-02-26 15:30:55,719 [INFO] src.evaluation:   TN=212795  FP=81
+2026-02-26 15:30:55,719 [INFO] src.evaluation:   FN=256  TP=1868
+2026-02-26 15:30:55,719 [INFO] src.evaluation:   False alarm rate (FPR): 0.0004
+2026-02-26 15:30:55,719 [INFO] src.evaluation:   Missed failure rate (FNR): 0.1205
+2026-02-26 15:30:55,853 [INFO] src.evaluation: Confusion matrix saved: D:\Safe Guard AI\outputs\confusion_matrix_random_forest.png
+2026-02-26 15:30:55,956 [INFO] src.evaluation: PR curve saved: D:\Safe Guard AI\outputs\pr_curve_random_forest.png
+2026-02-26 15:30:55,956 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:30:55,957 [INFO] FactoryGuard.Train: STEP 5: Training Production Model (LGBM)
+2026-02-26 15:30:55,957 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:30:56,289 [INFO] src.models: Class ratio: neg=851492, pos=8008, scale_pos_weight=106.3
+2026-02-26 15:31:10,131 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:31:10,132 [INFO] FactoryGuard.Train: STEP 6: Evaluating Production Model
+2026-02-26 15:31:10,132 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:31:11,402 [INFO] src.evaluation: ============================================================
+2026-02-26 15:31:11,402 [INFO] src.evaluation: EVALUATION: LightGBM
+2026-02-26 15:31:11,402 [INFO] src.evaluation: ============================================================
+2026-02-26 15:31:11,402 [INFO] src.evaluation:   PR-AUC     : 0.9334
+2026-02-26 15:31:11,402 [INFO] src.evaluation:   Precision  : 0.7419
+2026-02-26 15:31:11,402 [INFO] src.evaluation:   Recall     : 0.9298
+2026-02-26 15:31:11,402 [INFO] src.evaluation:   F1-Score   : 0.8253
+2026-02-26 15:31:11,505 [INFO] src.evaluation: 
+              precision    recall  f1-score   support
+
+      Normal       1.00      1.00      1.00    212876
+     Failure       0.74      0.93      0.83      2124
+
+    accuracy                           1.00    215000
+   macro avg       0.87      0.96      0.91    215000
+weighted avg       1.00      1.00      1.00    215000
+
+2026-02-26 15:31:11,515 [INFO] src.evaluation: Confusion Matrix:
+2026-02-26 15:31:11,515 [INFO] src.evaluation:   TN=212189  FP=687
+2026-02-26 15:31:11,515 [INFO] src.evaluation:   FN=149  TP=1975
+2026-02-26 15:31:11,515 [INFO] src.evaluation:   False alarm rate (FPR): 0.0032
+2026-02-26 15:31:11,516 [INFO] src.evaluation:   Missed failure rate (FNR): 0.0702
+2026-02-26 15:31:11,611 [INFO] src.evaluation: Confusion matrix saved: D:\Safe Guard AI\outputs\confusion_matrix_lightgbm.png
+2026-02-26 15:31:11,785 [INFO] src.evaluation: PR curve saved: D:\Safe Guard AI\outputs\pr_curve_lightgbm.png
+2026-02-26 15:31:11,798 [INFO] src.evaluation: 
+Model Comparison:
+                     precision  recall  f1_score  pr_auc
+Random Forest           0.9584  0.8795    0.9173  0.9338
+LightGBM                0.7419  0.9298    0.8253  0.9334
+Logistic Regression     0.5207  0.9360    0.6691  0.9026
+2026-02-26 15:31:11,804 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:31:11,804 [INFO] FactoryGuard.Train: STEP 7: Generating SHAP Explanations
+2026-02-26 15:31:11,804 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:31:13,017 [INFO] src.explainability: Computing SHAP values for 500 samples...
+2026-02-26 15:31:13,536 [INFO] src.explainability: 
+Top 10 Features by SHAP Importance:
+2026-02-26 15:31:13,536 [INFO] src.explainability:   pressure_rolling_mean_12h                 0.3090
+2026-02-26 15:31:13,537 [INFO] src.explainability:   temperature_rolling_std_12h               0.2298
+2026-02-26 15:31:13,537 [INFO] src.explainability:   vibration_rolling_std_12h                 0.2124
+2026-02-26 15:31:13,537 [INFO] src.explainability:   vibration_rolling_mean_12h                0.2030
+2026-02-26 15:31:13,537 [INFO] src.explainability:   temperature_rolling_std_6h                0.1934
+2026-02-26 15:31:13,538 [INFO] src.explainability:   pressure_rolling_std_12h                  0.1917
+2026-02-26 15:31:13,538 [INFO] src.explainability:   vibration_rolling_mean_1h                 0.1726
+2026-02-26 15:31:13,538 [INFO] src.explainability:   vibration_rolling_std_6h                  0.1476
+2026-02-26 15:31:13,538 [INFO] src.explainability:   vibration_ema_12h                         0.1458
+2026-02-26 15:31:13,538 [INFO] src.explainability:   temperature_rolling_mean_12h              0.1352
+2026-02-26 15:31:13,909 [INFO] src.explainability: SHAP global importance plot saved: D:\Safe Guard AI\outputs\shap_global_importance.png
+2026-02-26 15:31:13,910 [INFO] src.explainability: Generating local explanation for sample 274 (highest risk)
+2026-02-26 15:31:13,910 [INFO] src.explainability: 
+FAILURE PREDICTION EXPLANATION:
+The model predicted high failure risk because:
+  • vibration_rolling_mean_1h = 8.91 (increased failure risk by 2.1374)
+  • temperature_lag_1 = 6.76 (increased failure risk by 1.7365)
+  • vibration_lag_1 = 8.39 (increased failure risk by 1.5720)
+  • temperature_rolling_mean_1h = 9.83 (increased failure risk by 1.5612)
+  • pressure_diff_1 = -4.09 (increased failure risk by 1.3841)
+2026-02-26 15:31:14,325 [INFO] src.explainability: SHAP local explanation plot saved: D:\Safe Guard AI\outputs\shap_local_explanation.png
+2026-02-26 15:31:14,326 [INFO] src.explainability: Explanation text saved: D:\Safe Guard AI\outputs\failure_explanation.txt
+2026-02-26 15:31:14,326 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:31:14,326 [INFO] FactoryGuard.Train: STEP 8: Saving Model Artifacts
+2026-02-26 15:31:14,327 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:31:14,404 [INFO] FactoryGuard.Train: Model artifact saved: D:\Safe Guard AI\models\factoryguard_lgbm_v20260226_153114.pkl
+2026-02-26 15:31:14,480 [INFO] FactoryGuard.Train: Latest model updated: D:\Safe Guard AI\models\factoryguard_latest.pkl
+2026-02-26 15:31:14,480 [INFO] FactoryGuard.Train: ======================================================================
+2026-02-26 15:31:14,481 [INFO] FactoryGuard.Train: PIPELINE COMPLETE
+2026-02-26 15:31:14,481 [INFO] FactoryGuard.Train:   Best model   : LightGBM
+2026-02-26 15:31:14,481 [INFO] FactoryGuard.Train:   PR-AUC       : 0.9334
+2026-02-26 15:31:14,481 [INFO] FactoryGuard.Train:   Artifact     : D:\Safe Guard AI\models\factoryguard_lgbm_v20260226_153114.pkl
+2026-02-26 15:31:14,481 [INFO] FactoryGuard.Train: ======================================================================

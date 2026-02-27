@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FactoryGuard AI - Predictive Maintenance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .btn-predict {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-predict:active {
+            transform: translateY(0);
+        }
+
+        .btn-predict:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.normal {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+
+        .result.warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+
+        .result.danger {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .result.critical {
+            background: #f5c6cb;
+            border: 2px solid #bd2130;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .result-title {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .result.normal .result-title {
+            color: #155724;
+        }
+
+        .result.warning .result-title {
+            color: #856404;
+        }
+
+        .result.danger .result-title {
+            color: #721c24;
+        }
+
+        .result.critical .result-title {
+            color: #721c24;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge.normal {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge.warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .badge.danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge.critical {
+            background: #bd2130;
+            color: white;
+        }
+
+        .probability {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .result.normal .probability {
+            color: #28a745;
+        }
+
+        .result.warning .probability {
+            color: #ffc107;
+        }
+
+        .result.danger .probability {
+            color: #dc3545;
+        }
+
+        .result.critical .probability {
+            color: #bd2130;
+        }
+
+        .result-message {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .result.normal .result-message {
+            color: #155724;
+        }
+
+        .result.warning .result-message {
+            color: #856404;
+        }
+
+        .result.danger .result-message {
+            color: #721c24;
+        }
+
+        .result.critical .result-message {
+            color: #721c24;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 FactoryGuard AI</h1>
+            <p>IoT Predictive Maintenance Engine</p>
+        </div>
+
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="temperature">Temperature</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="number" 
+                        id="temperature" 
+                        name="temperature" 
+                        step="0.1" 
+                        value="55.0"
+                        required
+                    >
+                    <span class="input-unit">°C</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="vibration">Vibration</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="number" 
+                        id="vibration" 
+                        name="vibration" 
+                        step="0.01" 
+                        value="2.0"
+                        required
+                    >
+                    <span class="input-unit">mm/s</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="pressure">Pressure</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="number" 
+                        id="pressure" 
+                        name="pressure" 
+                        step="0.1" 
+                        value="6.0"
+                        required
+                    >
+                    <span class="input-unit">bar</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-predict" id="predictBtn">
+                Predict Failure Risk
+            </button>
+        </form>
+
+        <div class="error" id="error"></div>
+
+        <div class="result" id="result">
+            <div class="result-header">
+                <span class="result-title">Failure Probability</span>
+                <span class="badge" id="badge"></span>
+            </div>
+            <div class="probability" id="probability"></div>
+            <div class="result-message" id="message"></div>
+        </div>
+
+        <div class="footer">
+            Model: LightGBM | Response Time: <span id="latency">-</span> ms
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('predictionForm');
+        const predictBtn = document.getElementById('predictBtn');
+        const resultDiv = document.getElementById('result');
+        const errorDiv = document.getElementById('error');
+        const probabilityEl = document.getElementById('probability');
+        const badgeEl = document.getElementById('badge');
+        const messageEl = document.getElementById('message');
+        const latencyEl = document.getElementById('latency');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Disable button and show loading
+            predictBtn.disabled = true;
+            predictBtn.innerHTML = '<span class="spinner"></span>Analyzing...';
+            resultDiv.classList.remove('show');
+            errorDiv.classList.remove('show');
+
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const vibration = parseFloat(document.getElementById('vibration').value);
+            const pressure = parseFloat(document.getElementById('pressure').value);
+
+            const startTime = performance.now();
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        temperature: temperature,
+                        vibration: vibration,
+                        pressure: pressure
+                    })
+                });
+
+                const endTime = performance.now();
+                const responseTime = Math.round(endTime - startTime);
+                latencyEl.textContent = responseTime;
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Prediction failed');
+                }
+
+                const data = await response.json();
+                displayResult(data);
+
+            } catch (error) {
+                errorDiv.textContent = '❌ Error: ' + error.message;
+                errorDiv.classList.add('show');
+            } finally {
+                predictBtn.disabled = false;
+                predictBtn.textContent = 'Predict Failure Risk';
+            }
+        });
+
+        function displayResult(data) {
+            const probability = (data.failure_probability * 100).toFixed(1);
+            const riskLevel = data.risk_level;
+
+            probabilityEl.textContent = probability + '%';
+            badgeEl.textContent = riskLevel;
+
+            // Remove all status classes
+            resultDiv.classList.remove('normal', 'warning', 'danger', 'critical');
+            badgeEl.classList.remove('normal', 'warning', 'danger', 'critical');
+
+            // Add appropriate classes and messages
+            let statusClass, message;
+
+            if (riskLevel === 'LOW') {
+                statusClass = 'normal';
+                message = '✅ Machine is operating normally. No immediate action required.';
+            } else if (riskLevel === 'MEDIUM') {
+                statusClass = 'warning';
+                message = '⚠️ Moderate risk detected. Monitor closely and schedule inspection.';
+            } else if (riskLevel === 'HIGH') {
+                statusClass = 'danger';
+                message = '🔴 High failure risk! Schedule maintenance within 24 hours.';
+            } else if (riskLevel === 'CRITICAL') {
+                statusClass = 'critical';
+                message = '🚨 CRITICAL! Immediate shutdown recommended. Catastrophic failure imminent.';
+            }
+
+            resultDiv.classList.add(statusClass);
+            badgeEl.classList.add(statusClass);
+            messageEl.textContent = message;
+            resultDiv.classList.add('show');
+        }
+
+        // Test with pre-filled values on page load (for demo)
+        console.log('FactoryGuard AI - Frontend Ready');
+    </script>
+</body>
+</html>

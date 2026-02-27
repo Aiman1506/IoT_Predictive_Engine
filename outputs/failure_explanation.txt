@@ -1,0 +1,7 @@
+FAILURE PREDICTION EXPLANATION:
+The model predicted high failure risk because:
+  • vibration_rolling_mean_1h = 8.91 (increased failure risk by 2.1374)
+  • temperature_lag_1 = 6.76 (increased failure risk by 1.7365)
+  • vibration_lag_1 = 8.39 (increased failure risk by 1.5720)
+  • temperature_rolling_mean_1h = 9.83 (increased failure risk by 1.5612)
+  • pressure_diff_1 = -4.09 (increased failure risk by 1.3841)

@@ -1,0 +1,4 @@
+,precision,recall,f1_score,pr_auc
+Random Forest,0.9584,0.8795,0.9173,0.9338
+LightGBM,0.7419,0.9298,0.8253,0.9334
+Logistic Regression,0.5207,0.936,0.6691,0.9026
